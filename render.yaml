@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: ai-life-os-backend
+    env: python
+    region: oregon
+    plan: free
+    buildCommand: "cd backend && pip install -r requirements.txt"
+    startCommand: "cd backend && uvicorn app.main:app --host 0.0.0.0 --port $PORT"
+    envVars:
+      - key: GROQ_API_KEY
+        sync: false
+      - key: RESEND_API_KEY
+        sync: false
+      - key: DATABASE_URL
+        fromDatabase:
+          name: ai-life-os-db
+          property: connectionString
+      - key: PYTHON_VERSION
+        value: "3.11.0"
+    
+databases:
+  - name: ai-life-os-db
+    plan: free
+    databaseName: ailifeos
+    user: ailifeos
